@@ -1,0 +1,108 @@
+import webbrowser as wb
+import pyautogui as pa
+import pyperclip
+import os
+import time
+from playwright.sync_api import sync_playwright
+from tkinter import Tk, Text, Button, Label, Entry
+
+# Função chamada ao clicar no botão "Enviar"
+def enviar_formulario(descricao_text, usuario_entry, senha_entry):
+    usuario = usuario_entry.get()
+    senha = senha_entry.get()
+
+    with sync_playwright() as p:
+        navegador = p.chromium.launch(headless=False)
+        pagina = navegador.new_page()
+
+        # Abrir Página
+        pagina.goto("https://glpi.oncoclinicas.com.br/plugins/formcreator/front/formdisplay.php?id=71")
+
+        # Login
+        pagina.fill('xpath=//*[@id="login_name"]', usuario)
+        pagina.fill('xpath=//*[@id="login_password"]', senha)
+        pagina.locator('xpath=/html/body/div[1]/div/div/div[2]/div/form/div/div[1]/div[4]/button').click()
+
+        pa.press('F5')
+
+        # Para qual unidade deseja o atendimento?
+        pagina.locator('xpath=/html/body/div[2]/div/div/main/div/form/ol/li[1]/div[2]/div[5]/div/div/span/span[1]/span').click()
+        time.sleep(2)
+        pagina.fill('xpath=/html/body/span/span/span[1]/input', "  ")
+        time.sleep(1)
+        pa.press('enter')
+        time.sleep(3)
+
+        # Informe o departamento *
+        departamento_locator = 'xpath=/html/body/div[2]/div/div/main/div/form/ol/li[1]/div[2]/div[9]/div/div/span/span[1]/span/span[2]'
+        pagina.wait_for_selector(departamento_locator).click()
+
+        # Pressione 'Down' 50 vezes
+        for _ in range(162): 
+            pa.press('down')
+            # Aguarde um curto período entre as pressões
+
+        # Press Enter
+        pa.press('enter')
+
+        # Ramal
+        pagina.fill('xpath=/html/body/div[2]/div/div/main/div/form/ol/li[1]/div[2]/div[11]/div/div/input', "   ")
+
+        # Equipamento
+        pagina.locator('xpath=/html/body/div[2]/div/div/main/div/form/ol/li[2]/div[2]/div[1]/div/div/span').click()
+        time.sleep(2)
+        pagina.fill('xpath=/html/body/span/span/span[1]/input', "DESKTOP")
+        time.sleep(1)
+        pa.press('enter')
+        time.sleep(3)
+
+        # O que precisa:
+        pagina.locator('xpath=//*[@id="form-group-field-1454"]/div/span/span[1]/span/span[2]').click()
+        time.sleep(2)
+        pagina.fill('xpath=/html/body/span/span/span[1]/input', "Outras necessidades")
+        time.sleep(1)
+        pa.press('enter')
+
+        time.sleep(3)
+
+        # DESCRIÇÃO
+        descricao = descricao_text.get("1.0", "end-1c")
+        pagina.locator('xpath=//*[@id="form-group-field-1467"]/div/div[1]/div[1]/div[2]/div[1]').click()
+        time.sleep(2)
+        pa.typewrite(descricao)
+        time.sleep(3)
+
+        # Enviar
+       # pagina.locator('xpath=/html/body/div[2]/div/div/main/div/form/div[1]/button').click()
+
+        time.sleep(10)
+
+# Função principal para criar a interface gráfica
+def criar_interface():
+    root = Tk()
+    root.title("Descrição OS")
+
+    # Label e Entry para o usuário
+    usuario_label = Label(root, text="Usuário:")
+    usuario_label.pack()
+    usuario_entry = Entry(root)
+    usuario_entry.pack()
+
+    # Label e Entry para a senha
+    senha_label = Label(root, text="Senha:")
+    senha_label.pack()
+    senha_entry = Entry(root, show="*")
+    senha_entry.pack()
+
+    # Texto de descrição
+    descricao_text = Text(root, height=5, width=50)
+    descricao_text.pack()
+
+    # Botão de envio
+    enviar_button = Button(root, text="Enviar", command=lambda: enviar_formulario(descricao_text, usuario_entry, senha_entry))
+    enviar_button.pack()
+   
+    root.mainloop()
+
+# Chamar função para criar a interface
+criar_interface()
