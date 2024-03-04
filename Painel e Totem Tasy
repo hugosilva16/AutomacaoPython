@@ -1,0 +1,36 @@
+import webbrowser as wb
+import pyautogui as pa
+import pyperclip3 as pc
+import subprocess, sys
+import os
+import time
+import playwright
+
+from playwright.sync_api import sync_playwright
+
+with sync_playwright() as p:
+    time.sleep(2)
+    navegador = p.chromium.launch(headless=False) # headless
+    pagina = navegador.new_page()
+    #Pagina Tasy.
+    pagina.goto("link")
+    #Login
+    pagina.fill('xpath=//*[@id="loginUsername"]', "usuario")
+    #Senha
+    pagina.fill('xpath=//*[@id="loginPassword"]', "senha")
+    #Entrar
+    pagina.locator('xpath=//*[@id="loginForm"]/input[3]').click()
+    #Cancelar
+    pagina.locator('xpath=/html/body/div[4]/div[2]/div[1]/div[3]/div/button[1]').click()
+    #Gerenciamento de Senha
+    pagina.locator('xpath=//*[@id="app-view"]/tasy-corsisf1/div/w-mainlayout/div/div/w-launcher/div/div/div[1]/w-apps/div/div[1]/ul/li/w-feature-app/a/span').click()
+    time.sleep(4)
+    #Filas
+    pagina.locator('xpath=/html/body/div[1]/tasy-corsisf1/div/w-mainlayout/div/div/feature-instance/atepacse/div/div[1]/tasy-listbox/div/div/a').click()
+    time.sleep(4)
+    #Monitor
+    pagina.locator('xpath=/html/body/div[4]/div[2]/div[1]/div/a[3]').click()
+    #Click na Tela
+    pagina.locator('xpath=/html/body/div[1]/tasy-corsisf1/div/w-mainlayout/div/div/feature-instance/atepacse/div/tasypopupmenu/div/div/div/div/div/tasypopupmenu/tasy-wcall-panel/div/div/div[1]').click()
+    
+    time.sleep(80)
