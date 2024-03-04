@@ -1,0 +1,55 @@
+import pyautogui as pa
+import pyperclip3 as pc
+import os
+import time
+import playwright
+import webbrowser as wb
+
+from playwright.sync_api import sync_playwright
+
+with sync_playwright() as p:
+    navegador =p.chorme.exe(headless=False)
+    page = navegador.new_page()
+
+    page.goto("link")
+    
+    
+    # Esperar a página carregar
+    time.sleep(10)
+    
+    #Login
+    page.fill('xpath=//*[@id="loginUsername"]', "usuario")
+    
+    #Senha
+    page.fill('xpath=//*[@id="loginPassword"]', "senha")
+    
+    #Entrar
+    page.locator('xpath=//*[@id="loginForm"]/input[3]').click()
+    
+    #Panorama
+    page.locator('xpath=//*[@id="app-view"]/tasy-corsisf1/div/w-mainlayout/div/div/w-launcher/div/div/div[1]/w-apps/div/div[1]/ul/li/w-feature-app/a/span').click()
+    
+    #Filtro
+    page.locator('xpath=//*[@id="layout"]/div/div/w-dashboard-list/div/div[1]/w-title/div/div[3]/div[2]/tasy-wlabel').click()
+    
+    #Estabelecimento
+    page.locator('xpath=/html/body/div[1]/tasy-corsisf1/div/w-mainlayout/div/div/feature-instance/atepacdb/div/tasypopupmenu/tasypopupmenu/div/div/div/div/div/div/w-dashboard-list/div/div[1]/w-title/div/div[1]/div[2]/tasy-wfilter/div/tasy-wmdetail/div[2]/div[3]/form/div/div[1]/div/div[2]/tasy-listbox/div').click()
+    
+    #UMC
+    page.locator('xpath=//*[@id="ngdialog1"]/div[2]/div[1]/div[1]/div/div').click()
+    page.locator('xpath=/html/body/div[4]/div[2]/div[1]/div[2]/a').click()
+    
+    #Setor
+    page.locator('xpath=//*[@id="detail_1_container"]/div[2]/div/div[2]/tasy-listbox/div/div/a').click()
+    
+    #Unidade 7
+    page.locator('xpath=/html/body/div[4]/div[2]/div[1]/div[1]/div[77]').click()
+    page.locator('xpath=/html/body/div[4]/div[2]/div[1]/div[2]/a').click()
+    
+    #Filtrar
+    page.locator('xpath=//*[@id="layout"]/div/div/w-dashboard-list/div/div[1]/w-title/div/div[1]/div[2]/tasy-wfilter/div/div[2]/div/button').click()
+    
+    # Aguarde 600 segundos (10 minutos)
+    time.sleep(600)
+
+    
