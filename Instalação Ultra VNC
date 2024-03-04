@@ -1,0 +1,36 @@
+@echo off
+netsh firewall set icmpsetting 8
+
+
+"caminho/ULTRAVNC\UltraVNC_1_4_20_X64_Setup.exe"  /SP- /SILENT /NORESTART
+timeout /t 5 > nul
+"%programfiles%\uvnc bvba\UltraVNC\winvnc.exe" -install
+copy /Y "\\caminho\Softwares\ULTRAVNC\SCHook.dll" "C:\Program Files\uvnc bvba\UltraVNC\SCHook.dll"
+timeout /t 2 > nul
+copy /Y "\\caminho\Softwares\ULTRAVNC\SCHook64.dll" "C:\Program Files\uvnc bvba\UltraVNC\SCHook64.dll"
+timeout /t 2 > nul
+copy /Y "\\caminho\Softwares\ULTRAVNC\ACL.reg" "C:\Program Files\uvnc bvba\UltraVNC\ACL.reg"
+timeout /t 2 > nul
+copy /Y "\\caminho\Softwares\ULTRAVNC\vncserver.inf" "C:\Program Files\uvnc bvba\UltraVNC\vncserver.inf"
+timeout /t 2 > nul
+copy /Y \\caminho\Softwares\ULTRAVNC\ultravnc.ini" "C:\Program Files\uvnc bvba\UltraVNC\ultravnc.ini
+timeout /t 2 > nul
+cd C:\Program Files\uvnc bvba\UltraVNC
+reg.exe import ACL.reg
+timeout /t 3 > nul
+echo Configurado
+cd C:\Program Files\uvnc bvba\UltraVNC
+winvnc.exe -install
+winvnc.exe -servicehelper
+timeout /t 4 > nul
+net stop uvnc_service
+timeout /t 5 > nul
+copy /Y "\\caminho\Softwares\ULTRAVNC\MSLogonACL.exe" "C:\Program Files\uvnc bvba\UltraVNC\MSLogonACL.exe"
+timeout /t 4 > nul
+copy /Y "\\caminho\Softwares\ULTRAVNC\uvnc_settings.exe" "C:\Program Files\uvnc bvba\UltraVNC\uvnc_settings.exe"
+net start uvnc_service
+
+
+exit
+
+ 
